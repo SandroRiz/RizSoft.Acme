@@ -1,0 +1,127 @@
+﻿@page "/categories/list"
+@inject CategoryService CategoryService;
+@inject DialogService DialogService;
+
+<h3>Categories List</h3>
+
+<RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add New Category" Click="@InsertRow" Disabled=@(categoryToInsert != null) />
+<RadzenDataGrid @ref="CategorysGrid" TItem="Category" Data="@Categories" LoadData="@LoadData" EditMode="DataGridEditMode.Single" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+    <Columns>
+        <RadzenDataGridColumn TItem="Category" Property="@nameof(Category.Id)" Title="Id"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Category" Property="@nameof(Category.Name)" Title="Name">
+            <EditTemplate Context="category">
+                <RadzenTextBox @bind-Value="category.Name"></RadzenTextBox>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Category" Property="@nameof(Category.Description)" Title="Description">
+            <EditTemplate Context="category">
+                <RadzenTextArea @bind-Value="category.Description"></RadzenTextArea>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Category" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="120px">
+            <Template Context="category">
+                <RadzenButton Icon="edit" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@(args => EditRow(category))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="category">
+                <RadzenButton Icon="check" ButtonStyle="ButtonStyle.Primary" Class="m-1" Click="@((args) => SaveRow(category))">
+                </RadzenButton>
+                <RadzenButton Icon="close" ButtonStyle="ButtonStyle.Light" Class="m-1" Click="@((args) => CancelEdit(category))">
+                </RadzenButton>
+            </EditTemplate>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Category" Context="category" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="60px">
+            <Template Context="category">
+                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Class="m-1" Click="@(args => DeleteRow(category))" @onclick:stopPropagation="true">
+                </RadzenButton>
+            </Template>
+            <EditTemplate Context="category">
+
+
+            </EditTemplate>
+        </RadzenDataGridColumn>
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    public List<Category> Categories { get; set; }
+
+    RadzenDataGrid<Category> CategorysGrid;
+    Category categoryToInsert;
+
+    async Task LoadData()
+    {
+        Categories = await CategoryService.ListAsync();
+    }
+
+    async Task EditRow(Category category)
+    {
+        await CategorysGrid.EditRow(category);
+    }
+
+    async Task OnUpdateRow(Category category)
+    {
+        if (category == categoryToInsert)
+        {
+            categoryToInsert = null;
+        }
+
+        await CategoryService.UpdateAsync(category);
+
+    }
+
+    async Task SaveRow(Category category)
+    {
+        if (category == categoryToInsert)
+        {
+            categoryToInsert = null;
+        }
+
+        await CategorysGrid.UpdateRow(category);
+    }
+
+    void CancelEdit(Category category)
+    {
+        if (category == categoryToInsert)
+        {
+            categoryToInsert = null;
+        }
+
+        CategorysGrid.CancelEditRow(category);
+    }
+
+    async Task InsertRow()
+    {
+        categoryToInsert = new Category();
+        await CategorysGrid.InsertRow(categoryToInsert);
+    }
+
+    async Task OnCreateRow(Category category)
+    {
+
+        await CategoryService.AddAsync(category);
+
+    }
+
+    async Task DeleteRow(Category category)
+    {
+        var confirm = await DialogService.Confirm("Are you sure?", "Delete Record",new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+        if (confirm.HasValue && confirm.Value)
+        {
+            if (category == categoryToInsert)
+            {
+                categoryToInsert = null;
+            }
+
+            if (Categories.Contains(category))
+            {
+                await CategoryService.DeleteAsync(category);
+                await CategorysGrid.Reload();
+            }
+            else
+            {
+                CategorysGrid.CancelEditRow(category);
+            }
+        }
+    }
+}

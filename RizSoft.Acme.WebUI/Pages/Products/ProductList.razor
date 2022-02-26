@@ -4,12 +4,13 @@
 
 <h2>ProductList</h2>
 
+<span>@currentProduct?[0].ProductName</span>
 
-<span>@currentCategory</span>
-<RadzenDataGrid Data="@Products" TItem="Product" AllowSorting="true" AllowPaging="true" PageSize="20" AllowFiltering="true" FilterMode="FilterMode.Simple" AllowColumnResize="true">
+<RadzenDataGrid Data="@Products" TItem="Product" AllowSorting="true" AllowPaging="true" PageSize="20" AllowFiltering="true" FilterMode="FilterMode.Simple" AllowColumnResize="true"
+ SelectionMode="DataGridSelectionMode.Single" @bind-Value="@currentProduct" CellRender="@CellRender" RowRender="@RowRender">
     <Columns>
-        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Id)" Title="ID" Filterable="false"></RadzenDataGridColumn>
-        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Sku)" Title="Sku"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Id)" Title="ID" Filterable="false" Visible="false"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Sku)" Title="Sku" Frozen="true"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ProductName)" Title="Name"></RadzenDataGridColumn>
 
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ProductType)" Title="Type" FilterValue="@currentProductType" Type="typeof(ProductTypeEnum)">
@@ -17,7 +18,7 @@
                 @((ProductTypeEnum)data.ProductType)
             </Template>
             <FilterTemplate>
-                <RadzenDropDown Data="@(Enum.GetValues(typeof(ProductTypeEnum)).Cast<ProductTypeEnum?>().Select(t => new { Text = $"{t}", Value = t == ProductTypeEnum.All ? null : t }))" ValueProperty="Value" TextProperty="Text" @bind-Value="@currentProductType"></RadzenDropDown>
+                <RadzenDropDown Data="@(Enum.GetValues(typeof(ProductTypeEnum)).Cast<ProductTypeEnum?>().Select(t => new { Text = $"{t}", Value = t == ProductTypeEnum.All ? null : t }))"  ValueProperty="Value" TextProperty="Text" @bind-Value="@currentProductType"></RadzenDropDown>
             </FilterTemplate>
         </RadzenDataGridColumn>
 
@@ -26,12 +27,13 @@
                 @CostingMethods[data.CostingMethod]
             </Template>
             <FilterTemplate>
-                <RadzenDropDown Data="@CostingMethods" TValue="string" @bind-Value="@currentCostingMethod" ValueProperty="Key" TextProperty="Value" Change="@OnFilterCostingMethodChange"></RadzenDropDown>
+                <RadzenDropDown Data="@CostingMethods" TValue="string" @bind-Value="@currentCostingMethod" ValueProperty="Key" TextProperty="Value" Change="@OnFilterCostingMethodChange"
+                ></RadzenDropDown>
             </FilterTemplate>
         </RadzenDataGridColumn>
 
         <RadzenDataGridColumn TItem="Product" Property="CategoryId" SortProperty="Category.Name" GroupProperty="Category.Name"
-                              FilterValue="@currentCategory" FilterProperty="Category.Id" Title="Category">
+                              FilterValue="@currentCategory" FilterProperty="Category.Id" Title="Category" >
             <Template Context="data">
                 @(data.Category?.Name)
             </Template>
@@ -40,10 +42,11 @@
             </FilterTemplate>
         </RadzenDataGridColumn>
 
-        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ListPrice)" Title="Price"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ListPrice)" Title="Price" FormatString="{0:c}" TextAlign="TextAlign.Right"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.OnMarketSince)" Title="Launched" FormatString="{0:d}"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Weight)" Title="Weight (Kg)"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.PackDimension)" Title="Pack"></RadzenDataGridColumn>
+
     </Columns>
 
 </RadzenDataGrid>
@@ -62,7 +65,8 @@
         {"F","FIFO" }
     };
 
-    ProductTypeEnum? currentProductType;
+    IList<Product>? currentProduct;
+    ProductTypeEnum? currentProductType ;
     public enum ProductTypeEnum : byte
     {
         Product = 1,
@@ -90,5 +94,17 @@
     {
         if (currentCategory.HasValue && currentCategory.Value == 0)
             currentCategory = null;
+    }
+
+     void CellRender(DataGridCellRenderEventArgs<Product> args)
+    {
+        if (args.Column.Property == "ListPrice")
+        {
+            args.Attributes.Add("style", $"background-color: {(args.Data.ListPrice > (decimal)700 ? "red" : "green")};");
+        }
+    }
+     void RowRender(RowRenderEventArgs<Product> args)
+    {
+        args.Attributes.Add("style", $"font-weight: {(args.Data.PackDimension > 100 ? "bold" : "normal")};");
     }
 }
