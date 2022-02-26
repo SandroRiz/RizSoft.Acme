@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RizSoft.Acme.Domain", "RizSoft.Acme.Domain\RizSoft.Acme.Domain.csproj", "{4339FCDC-F1F5-4284-9A6C-646B762F9826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RizSoft.Acme.Services", "RizSoft.Acme.Services\RizSoft.Acme.Services.csproj", "{EF3319B2-82B0-4057-B317-67C1C6AB3076}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{4B6BC1A1-558D-4532-82DC-52B93E608514}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4804429E-58A8-4570-B4F6-36458B3AD8AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{C61C3C0A-102E-4E72-AF42-3011E4C0DF46}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{A4CF1D86-453A-42A1-8A88-B3D9DBFF5059}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RizSoft.Acme.Application", "RizSoft.Acme.Application\RizSoft.Acme.Application.csproj", "{87F29375-BC74-4987-AA38-BC0DD46DA786}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RizSoft.Acme.WebUI", "RizSoft.Acme.WebUI\RizSoft.Acme.WebUI.csproj", "{9CDE3638-925B-4AF4-BA44-1518F7F93F06}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4339FCDC-F1F5-4284-9A6C-646B762F9826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4339FCDC-F1F5-4284-9A6C-646B762F9826}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4339FCDC-F1F5-4284-9A6C-646B762F9826}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4339FCDC-F1F5-4284-9A6C-646B762F9826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3319B2-82B0-4057-B317-67C1C6AB3076}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3319B2-82B0-4057-B317-67C1C6AB3076}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3319B2-82B0-4057-B317-67C1C6AB3076}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3319B2-82B0-4057-B317-67C1C6AB3076}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87F29375-BC74-4987-AA38-BC0DD46DA786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87F29375-BC74-4987-AA38-BC0DD46DA786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87F29375-BC74-4987-AA38-BC0DD46DA786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87F29375-BC74-4987-AA38-BC0DD46DA786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CDE3638-925B-4AF4-BA44-1518F7F93F06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CDE3638-925B-4AF4-BA44-1518F7F93F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CDE3638-925B-4AF4-BA44-1518F7F93F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CDE3638-925B-4AF4-BA44-1518F7F93F06}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4339FCDC-F1F5-4284-9A6C-646B762F9826} = {4B6BC1A1-558D-4532-82DC-52B93E608514}
+		{EF3319B2-82B0-4057-B317-67C1C6AB3076} = {C61C3C0A-102E-4E72-AF42-3011E4C0DF46}
+		{87F29375-BC74-4987-AA38-BC0DD46DA786} = {A4CF1D86-453A-42A1-8A88-B3D9DBFF5059}
+		{9CDE3638-925B-4AF4-BA44-1518F7F93F06} = {4804429E-58A8-4570-B4F6-36458B3AD8AD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {89591616-8D8D-4D53-B5BC-985812DF5A3C}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,94 @@
+﻿@page "/products/list"
+@inject ProductService ProductService;
+@inject CategoryService CategoryService;
+
+<h2>ProductList</h2>
+
+
+<span>@currentCategory</span>
+<RadzenDataGrid Data="@Products" TItem="Product" AllowSorting="true" AllowPaging="true" PageSize="20" AllowFiltering="true" FilterMode="FilterMode.Simple" AllowColumnResize="true">
+    <Columns>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Id)" Title="ID" Filterable="false"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Sku)" Title="Sku"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ProductName)" Title="Name"></RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ProductType)" Title="Type" FilterValue="@currentProductType" Type="typeof(ProductTypeEnum)">
+            <Template Context="data">
+                @((ProductTypeEnum)data.ProductType)
+            </Template>
+            <FilterTemplate>
+                <RadzenDropDown Data="@(Enum.GetValues(typeof(ProductTypeEnum)).Cast<ProductTypeEnum?>().Select(t => new { Text = $"{t}", Value = t == ProductTypeEnum.All ? null : t }))" ValueProperty="Value" TextProperty="Text" @bind-Value="@currentProductType"></RadzenDropDown>
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.CostingMethod)" Title="Costing" FilterValue="@currentCostingMethod">
+            <Template Context="data">
+                @CostingMethods[data.CostingMethod]
+            </Template>
+            <FilterTemplate>
+                <RadzenDropDown Data="@CostingMethods" TValue="string" @bind-Value="@currentCostingMethod" ValueProperty="Key" TextProperty="Value" Change="@OnFilterCostingMethodChange"></RadzenDropDown>
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Property="CategoryId" SortProperty="Category.Name" GroupProperty="Category.Name"
+                              FilterValue="@currentCategory" FilterProperty="Category.Id" Title="Category">
+            <Template Context="data">
+                @(data.Category?.Name)
+            </Template>
+            <FilterTemplate>
+                <RadzenDropDown Data="@Categories" TValue="int?" TextProperty="Name" ValueProperty="Id" Change="@OnFilterCategoryChange" @bind-Value="@currentCategory"></RadzenDropDown>
+            </FilterTemplate>
+        </RadzenDataGridColumn>
+
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ListPrice)" Title="Price"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.OnMarketSince)" Title="Launched" FormatString="{0:d}"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Weight)" Title="Weight (Kg)"></RadzenDataGridColumn>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.PackDimension)" Title="Pack"></RadzenDataGridColumn>
+    </Columns>
+
+</RadzenDataGrid>
+
+
+
+@code {
+    public List<Product>? Products { get; set; }
+    public List<Category> Categories { get; set; }
+
+    string currentCostingMethod = "";
+    Dictionary<string, string> CostingMethods = new Dictionary<string, string>()
+    {
+        {"-", "(All)" },
+        {"L", "LIFO" },
+        {"F","FIFO" }
+    };
+
+    ProductTypeEnum? currentProductType;
+    public enum ProductTypeEnum : byte
+    {
+        Product = 1,
+        Service = 2,
+        Digital = 3,
+        All = 0
+    }
+
+    private int? currentCategory;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Products = await ProductService.ListActive();
+        Categories = await CategoryService.ListAsync();
+        Categories.Insert(0, new Category { Id = 0, Name = "(All)" });
+    }
+
+    void OnFilterCostingMethodChange(object value)
+    {
+        if (currentCostingMethod == "-")
+            currentCostingMethod = null;
+    }
+
+    void OnFilterCategoryChange(object value)
+    {
+        if (currentCategory.HasValue && currentCategory.Value == 0)
+            currentCategory = null;
+    }
+}

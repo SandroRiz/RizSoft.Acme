@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Radzen.Blazor" Version="3.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RizSoft.Acme.Application\RizSoft.Acme.Application.csproj" />
+    <ProjectReference Include="..\RizSoft.Acme.Domain\RizSoft.Acme.Domain.csproj" />
+    <ProjectReference Include="..\RizSoft.Acme.Services\RizSoft.Acme.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="RizSoft.Acme.Domain.Models" />
+    <Using Include="RizSoft.Acme.Services" />
+  </ItemGroup>
+</Project>
