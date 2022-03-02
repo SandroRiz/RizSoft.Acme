@@ -8,6 +8,16 @@ public class ProductService : BaseService<Product, int>
     {
     }
 
+    public async Task<Product> GetWithTagsAsync(int id)
+    {
+        using var ctx = CtxFactory.CreateDbContext();
+        return await ctx.Products
+            .Include(p => p.IdTags)
+            .Where( p => p.Id == id)
+            .FirstOrDefaultAsync();
+    }
+
+
     public async Task<List<Product>> ListActive()
     {
         using var ctx = CtxFactory.CreateDbContext();
