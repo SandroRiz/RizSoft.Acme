@@ -1,5 +1,4 @@
-﻿
-string connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Acme;Trusted_Connection=Yes;";
+﻿string connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Acme;Trusted_Connection=Yes;";
 AcmeContextFactory factory = new AcmeContextFactory(connString);
 
 ProductService productService = new ProductService(factory);
