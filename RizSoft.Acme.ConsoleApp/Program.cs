@@ -1,5 +1,57 @@
-﻿string connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Acme;Trusted_Connection=Yes;";
+﻿using Microsoft.EntityFrameworkCore;
+
+string connString = @"Data Source=(localdb)\mssqllocaldb;Initial Catalog=Acme;Trusted_Connection=Yes;";
 AcmeContextFactory factory = new AcmeContextFactory(connString);
+DbContextOptionsBuilder<AcmeContext> optionsBuilder = new DbContextOptionsBuilder<AcmeContext>();
+optionsBuilder.UseSqlServer(connString);
+AcmeContext context = new AcmeContext(optionsBuilder.Options);
+
+/* con servizio NON VA */
+
+OrderService orderService = new OrderService(factory);
+
+Order order = await orderService.GetAsync(1);
+Console.WriteLine($"Order #{order.Id} del {order.OrderDate} cliente {order.Customer.CustomerName} con {order.OrderRows.Count} righe");
+order.ShippedDate = DateTime.Now;
+order.Customer.Email = "uvdqy5@nqtay.hnwbsr.net";
+if (order.OrderRows.Any())
+{
+    var orderRow = order.OrderRows.First();
+    orderRow.Discount = 99;
+}
+order.OrderRows.Add(new OrderRow { RowNumber = 3, ProductId =3, Qty=30, UnitPrice=300, Discount=30 });
+await orderService.UpdateAsync(order);
+
+Console.WriteLine("Done");
+return;
+
+
+// con Datacontext Diretto funziona
+/*
+var db = factory.CreateDbContext();
+Order? order = await db.Orders
+            .Where(o => o.Id == 1)
+            .Include(o => o.OrderRows)
+            .Include(o => o.Customer)
+            .FirstOrDefaultAsync();
+
+Console.WriteLine($"Order #{order.Id} del {order.OrderDate} cliente {order.Customer.CustomerName} con {order.OrderRows.Count} righe");
+order.ShippedDate = DateTime.Now;
+order.Customer.Email = "uvdqy5@nqtay.hnwbsr.com";
+if (order.OrderRows.Any())
+{
+    var orderRow = order.OrderRows.First();
+    orderRow.Discount = 99;
+}
+order.OrderRows.Add(new OrderRow { RowNumber = 3, ProductId = 3, Qty = 30, UnitPrice = 300, Discount = 30 });
+await db.SaveChangesAsync();
+
+Console.WriteLine("Done");
+return;
+
+*/
+
+// PRODUCTS AND TAGS
 
 ProductService productService = new ProductService(factory);
 TagService tagService = new TagService(factory);

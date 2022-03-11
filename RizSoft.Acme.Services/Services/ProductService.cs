@@ -10,8 +10,8 @@ public class ProductService : BaseService<Product, int>
 
     public async Task<Product> GetWithTagsAsync(int id)
     {
-        using var ctx = CtxFactory.CreateDbContext();
-        return await ctx.Products
+        //using var Context = ContextFactory.CreateDbContext();
+        return await Context.Products
             .Include(p => p.IdTags)
             .Where(p => p.Id == id)
             .FirstOrDefaultAsync();
@@ -19,12 +19,12 @@ public class ProductService : BaseService<Product, int>
 
     public async Task<Product> AddTag(int idProduct, Tag tag)
     {
-        using var ctx = CtxFactory.CreateDbContext();
-        var product = await ctx.Products.FindAsync(idProduct);
+        //using var Context = ContextFactory.CreateDbContext();
+        var product = await Context.Products.FindAsync(idProduct);
         if (product != null)
         {
             product.IdTags.Add(tag);
-            await ctx.SaveChangesAsync();
+            await Context.SaveChangesAsync();
             return product;
         }
         else
@@ -33,8 +33,8 @@ public class ProductService : BaseService<Product, int>
 
     public async Task<List<Product>> ListActive()
     {
-        using var ctx = CtxFactory.CreateDbContext();
-        return await ctx.Products
+        //using var Context = ContextFactory.CreateDbContext();
+        return await Context.Products
             .Include(p => p.Category)
             .Where(e => !e.Discontinued)
             .OrderBy(e => e.ProductName)

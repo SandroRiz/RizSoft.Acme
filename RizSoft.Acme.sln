@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RizSoft.Acme.WebUI", "RizSo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Playground", "Playground", "{9764F800-C286-4200-934C-2EEAFF59A43B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RizSoft.Acme.ConsoleApp", "RizSoft.Acme.ConsoleApp\RizSoft.Acme.ConsoleApp.csproj", "{615B4DF5-6B54-4709-A620-0601165606C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RizSoft.Acme.ConsoleApp", "RizSoft.Acme.ConsoleApp\RizSoft.Acme.ConsoleApp.csproj", "{615B4DF5-6B54-4709-A620-0601165606C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

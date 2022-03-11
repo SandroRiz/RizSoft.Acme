@@ -2,10 +2,11 @@
 
 namespace RizSoft.Acme.Services;
 
-public class BaseService<T, TKey> : QueryBaseRepository<T>, IBaseRepository<T, TKey>
+public class BaseService2<T, TKey> : QueryBaseRepository<T>, IBaseRepository<T, TKey>
 where T : class
 {
-    public BaseService(IDbContextFactory<AcmeContext> ctxFactory) : base(ctxFactory)
+    
+    public BaseService2(IDbContextFactory<AcmeContext> ctxFactory) : base(ctxFactory)
     {
     }
     //public DbSet<T> Set => Context.Set<T>();

@@ -18,6 +18,18 @@
          "ObjectType": 0
       },
       {
+         "Name": "[dbo].[Customers]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[OrderRows]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[dbo].[Orders]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[dbo].[Products]",
          "ObjectType": 0
       },

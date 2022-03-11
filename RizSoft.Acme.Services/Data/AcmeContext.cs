@@ -16,6 +16,9 @@ namespace RizSoft.Acme.Services
         }
 
         public virtual DbSet<Category> Categories { get; set; }
+        public virtual DbSet<Customer> Customers { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderRow> OrderRows { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
 
@@ -33,6 +36,61 @@ namespace RizSoft.Acme.Services
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Customer>(entity =>
+            {
+                entity.Property(e => e.Address).HasMaxLength(100);
+
+                entity.Property(e => e.City).HasMaxLength(50);
+
+                entity.Property(e => e.CustomerName).HasMaxLength(100);
+
+                entity.Property(e => e.Email)
+                    .HasMaxLength(128)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Phone)
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PostalCode).HasMaxLength(10);
+
+                entity.Property(e => e.State).HasMaxLength(5);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(e => e.OrderDate).HasPrecision(0);
+
+                entity.Property(e => e.ShippedDate).HasPrecision(0);
+
+                entity.Property(e => e.ShippingCosts).HasColumnType("money");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Orders_Customers");
+            });
+
+            modelBuilder.Entity<OrderRow>(entity =>
+            {
+                entity.Property(e => e.Discount).HasColumnType("decimal(4, 1)");
+
+                entity.Property(e => e.UnitPrice).HasColumnType("money");
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderRows)
+                    .HasForeignKey(d => d.OrderId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderRows_Orders");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.OrderRows)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_OrderRows_Products");
             });
 
             modelBuilder.Entity<Product>(entity =>

@@ -9,6 +9,7 @@ namespace RizSoft.Acme.Domain.Models
     {
         public Product()
         {
+            OrderRows = new HashSet<OrderRow>();
             IdTags = new HashSet<Tag>();
         }
 
@@ -37,6 +38,7 @@ namespace RizSoft.Acme.Domain.Models
         public DateTime? LastModifiedDate { get; set; }
 
         public virtual Category Category { get; set; }
+        public virtual ICollection<OrderRow> OrderRows { get; set; }
 
         public virtual ICollection<Tag> IdTags { get; set; }
     }

@@ -1,0 +1,18 @@
+﻿<h3>ProductCard</h3>
+
+<RadzenCard>
+    <h3>@Product?.ProductName</h3>
+</RadzenCard>
+
+@code {
+    Product Product;
+    [Inject] ProductService ProductService { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Product = await ProductService.GetAsync(Id);
+    }
+}

@@ -10,6 +10,13 @@ Welcome to your new app.
 
 <RadzenButton Text="@text"  Click="@ButtonClicked"></RadzenButton>
 
+@for (var i = 0; i < 10; i++)
+{
+    <RizSoft.Acme.WebUI.Pages.Products.ProductCard Id="@i" />
+}
+
+
+
 
 @code {
     string text = "Hi";
