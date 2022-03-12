@@ -10,7 +10,7 @@ namespace RizSoft.Acme.Domain.Models
         public Product()
         {
             OrderRows = new HashSet<OrderRow>();
-            IdTags = new HashSet<Tag>();
+            Tags = new HashSet<Tag>();
         }
 
         public int Id { get; set; }
@@ -40,6 +40,6 @@ namespace RizSoft.Acme.Domain.Models
         public virtual Category Category { get; set; }
         public virtual ICollection<OrderRow> OrderRows { get; set; }
 
-        public virtual ICollection<Tag> IdTags { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
     }
 }

@@ -12,7 +12,7 @@ public class ProductService : BaseService<Product, int>
     {
         //using var Context = ContextFactory.CreateDbContext();
         return await Context.Products
-            .Include(p => p.IdTags)
+            .Include(p => p.Tags)
             .Where(p => p.Id == id)
             .FirstOrDefaultAsync();
     }
@@ -23,7 +23,7 @@ public class ProductService : BaseService<Product, int>
         var product = await Context.Products.FindAsync(idProduct);
         if (product != null)
         {
-            product.IdTags.Add(tag);
+            product.Tags.Add(tag);
             await Context.SaveChangesAsync();
             return product;
         }

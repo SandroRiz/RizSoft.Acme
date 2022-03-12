@@ -9,12 +9,12 @@ namespace RizSoft.Acme.Domain.Models
     {
         public Tag()
         {
-            IdProducts = new HashSet<Product>();
+            Products = new HashSet<Product>();
         }
 
         public int Id { get; set; }
         public string TagName { get; set; }
 
-        public virtual ICollection<Product> IdProducts { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

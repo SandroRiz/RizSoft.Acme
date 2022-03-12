@@ -152,15 +152,15 @@ namespace RizSoft.Acme.Services
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.HasMany(d => d.IdProducts)
-                    .WithMany(p => p.IdTags)
+                entity.HasMany(d => d.Products)
+                    .WithMany(p => p.Tags)
                     .UsingEntity<Dictionary<string, object>>(
                         "TagsProduct",
-                        l => l.HasOne<Product>().WithMany().HasForeignKey("IdProduct").HasConstraintName("FK_TagsProducts_Products"),
-                        r => r.HasOne<Tag>().WithMany().HasForeignKey("IdTag").HasConstraintName("FK_TagsProducts_Tags"),
+                        l => l.HasOne<Product>().WithMany().HasForeignKey("ProductId").HasConstraintName("FK_TagsProducts_Products"),
+                        r => r.HasOne<Tag>().WithMany().HasForeignKey("TagId").HasConstraintName("FK_TagsProducts_Tags"),
                         j =>
                         {
-                            j.HasKey("IdTag", "IdProduct");
+                            j.HasKey("TagId", "ProductId");
 
                             j.ToTable("TagsProducts");
                         });
