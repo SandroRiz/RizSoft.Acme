@@ -2,7 +2,7 @@
 
 namespace RizSoft.Acme.Services;
 
-public class ProductService : BaseService<Product, int>
+public class ProductService : BaseContextService<Product, int>
 {
     public ProductService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {
@@ -31,12 +31,22 @@ public class ProductService : BaseService<Product, int>
             return null;
     }
 
-    public async Task<List<Product>> ListActive()
+    public async Task<List<Product>> ListActiveAsync()
     {
         //using var Context = ContextFactory.CreateDbContext();
         return await Context.Products
             .Include(p => p.Category)
             .Where(e => !e.Discontinued)
+            .OrderBy(e => e.ProductName)
+            .ToListAsync();
+    }
+
+    public async Task<List<Product>> ListbyCategoryAsync(int categoryId)
+    {
+        //using var Context = ContextFactory.CreateDbContext();
+        return await Context.Products
+            .Include(p => p.Category)
+            .Where(p=> p.CategoryId == categoryId)
             .OrderBy(e => e.ProductName)
             .ToListAsync();
 

@@ -1,7 +1,7 @@
 ﻿
 namespace RizSoft.Acme.Services;
 
-public class OrderService : BaseService<Order, int>
+public class OrderService : BaseContextService<Order, int>
 {
     public OrderService(IDbContextFactory<AcmeContext> factory) : base(factory)
     { }

@@ -1,18 +1,18 @@
 ﻿namespace RizSoft.Acme.Services;
 
-public class BaseService<T, Tkey> 
+public class BaseContextService<T, Tkey> 
 where T : class
 {
 
     protected AcmeContext Context { get; }
     protected IDbContextFactory<AcmeContext> CtxFactory { get; }
 
-    public BaseService(AcmeContext context)
+    public BaseContextService(AcmeContext context)
     {
         this.Context = context;
     }
 
-    public BaseService(IDbContextFactory<AcmeContext> factory)
+    public BaseContextService(IDbContextFactory<AcmeContext> factory)
     {
         this.Context = factory.CreateDbContext();
         this.CtxFactory = factory;

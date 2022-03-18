@@ -2,7 +2,7 @@
 
 namespace RizSoft.Acme.Services;
 
-public class TagService : BaseService<Tag, int>
+public class TagService : BaseContextService<Tag, int>
 {
     public TagService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {

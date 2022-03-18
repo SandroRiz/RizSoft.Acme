@@ -1,10 +1,11 @@
 ﻿@page "/products/list"
+@page "/products/list/{CategoryId:int}"
 @inject ProductService ProductService;
 @inject CategoryService CategoryService;
+@inject TagService TagService;
+<h4>ProductList</h4>
 
-<h2>ProductList</h2>
 
-<span>@currentProduct?[0].ProductName</span>
 
 <RadzenDataGrid Data="@Products" TItem="Product" AllowSorting="true" AllowPaging="true" PageSize="20" AllowFiltering="true" FilterMode="FilterMode.Simple" AllowColumnResize="true"
  SelectionMode="DataGridSelectionMode.Single" @bind-Value="@currentProduct" CellRender="@CellRender" RowRender="@RowRender">
@@ -52,59 +53,6 @@
 </RadzenDataGrid>
 
 
-
-@code {
-    public List<Product>? Products { get; set; }
-    public List<Category> Categories { get; set; }
-
-    string currentCostingMethod = "";
-    Dictionary<string, string> CostingMethods = new Dictionary<string, string>()
-    {
-        {"-", "(All)" },
-        {"L", "LIFO" },
-        {"F","FIFO" }
-    };
-
-    IList<Product>? currentProduct;
-    ProductTypeEnum? currentProductType ;
-    public enum ProductTypeEnum : byte
-    {
-        Product = 1,
-        Service = 2,
-        Digital = 3,
-        All = 0
-    }
-
-    private int? currentCategory;
-
-    protected override async Task OnInitializedAsync()
-    {
-        Products = await ProductService.ListActive();
-        Categories = await CategoryService.ListAsync();
-        Categories.Insert(0, new Category { Id = 0, Name = "(All)" });
-    }
-
-    void OnFilterCostingMethodChange(object value)
-    {
-        if (currentCostingMethod == "-")
-            currentCostingMethod = null;
-    }
-
-    void OnFilterCategoryChange(object value)
-    {
-        if (currentCategory.HasValue && currentCategory.Value == 0)
-            currentCategory = null;
-    }
-
-     void CellRender(DataGridCellRenderEventArgs<Product> args)
-    {
-        if (args.Column.Property == "ListPrice")
-        {
-            args.Attributes.Add("style", $"background-color: {(args.Data.ListPrice > (decimal)700 ? "red" : "green")};");
-        }
-    }
-     void RowRender(RowRenderEventArgs<Product> args)
-    {
-        args.Attributes.Add("style", $"font-weight: {(args.Data.PackDimension > 100 ? "bold" : "normal")};");
-    }
-}
+<p>Aggiungi Tag a Prodotto: <span>@currentProduct?[0].Id</span></p>
+<RadzenTextBox @bind-Value="TagName"></RadzenTextBox>
+<RadzenButton Text="Salva" Click="SaveTag"></RadzenButton>

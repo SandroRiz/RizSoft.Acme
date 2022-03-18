@@ -6,6 +6,7 @@
         {
             services.AddTransient<ProductService>();
             services.AddTransient<CategoryService>();
+            services.AddTransient<TagService>();
         }
     }
 }
