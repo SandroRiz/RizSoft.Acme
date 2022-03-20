@@ -20,7 +20,12 @@ builder.Services.AddScoped<ContextMenuService>();
 
 //Acme
 var connectionString = builder.Configuration.GetConnectionString("Db");
-builder.Services.AddPooledDbContextFactory<AcmeContext>(o => o.UseSqlServer(connectionString));
+builder.Services.AddPooledDbContextFactory<AcmeContext>(o =>
+{
+    o.UseSqlServer(connectionString);
+    o.EnableSensitiveDataLogging();
+}
+    );
 
 builder.Services.AddAcmeServices();
 
