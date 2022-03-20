@@ -96,21 +96,17 @@ namespace RizSoft.Acme.Services
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.CostingMethod)
-                    .IsRequired()
                     .HasMaxLength(1)
                     .IsUnicode(false)
                     .HasComment("L=LIFO, F=FIFO");
 
                 entity.Property(e => e.DataSheetUrl)
-                    .IsRequired()
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ListPrice).HasColumnType("money");
 
-                entity.Property(e => e.LongDescription)
-                    .IsRequired()
-                    .IsUnicode(false);
+                entity.Property(e => e.LongDescription).IsUnicode(false);
 
                 entity.Property(e => e.OnMarketSince).HasColumnType("date");
 
@@ -127,12 +123,10 @@ namespace RizSoft.Acme.Services
                     .IsConcurrencyToken();
 
                 entity.Property(e => e.ShortDescription)
-                    .IsRequired()
                     .HasMaxLength(1024)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Sku)
-                    .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false);
 

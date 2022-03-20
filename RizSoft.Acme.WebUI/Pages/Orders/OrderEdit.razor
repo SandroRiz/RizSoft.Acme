@@ -1,0 +1,26 @@
+﻿@page "/orders/edit"
+
+<h3>Order Edit</h3>
+
+<p>OrderId:  <RadzenNumeric TValue="int" Change=@(args => OnChange(args)) Class="w-10" @bind-Value="OrderId" /></p>
+@if (Order != null)
+{
+    <h4>Order #@Order.Id del @Order.OrderDate Cliente @Order.Customer.CustomerName &lt;@Order.Customer.Email&gt;</h4>
+    <RadzenButton Text="Aggiorna Data Ordine e Email Cliente" Click="UpdateDate" ButtonStyle="ButtonStyle.Secondary" ></RadzenButton>
+
+    <h5 class="mt-3">Righe:</h5>
+
+    <ul>
+        @foreach (var row in Order.OrderRows)
+        {
+            <li>Riga @row.RowNumber Prodotto @row.ProductId Qta=@row.Qty Prezzo=@row.UnitPrice Sconto @row.Discount </li>
+        }
+    </ul>
+
+    <RadzenButton Text="Aggiungi una Riga" Click="AddRow" ButtonStyle="ButtonStyle.Secondary"></RadzenButton>
+    <RadzenButton Text="Togli Prima Riga" Click="DeleteRow" ButtonStyle="ButtonStyle.Secondary"></RadzenButton>
+
+    <div class="mt-5">
+     <RadzenButton Text="Salva tutto" Click="Save"></RadzenButton>
+     </div>
+}

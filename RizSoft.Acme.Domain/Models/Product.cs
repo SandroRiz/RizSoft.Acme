@@ -19,17 +19,17 @@ namespace RizSoft.Acme.Domain.Models
         /// <summary>
         /// 1=Product, 2=Service, 3=Digital
         /// </summary>
-        public byte ProductType { get; set; }
+        public byte? ProductType { get; set; }
         public int? CategoryId { get; set; }
-        public decimal ListPrice { get; set; }
-        public bool Discontinued { get; set; }
-        public decimal Weight { get; set; }
-        public int PackDimension { get; set; }
+        public decimal? ListPrice { get; set; }
+        public bool? Discontinued { get; set; }
+        public decimal? Weight { get; set; }
+        public int? PackDimension { get; set; }
         /// <summary>
         /// L=LIFO, F=FIFO
         /// </summary>
         public string CostingMethod { get; set; }
-        public DateTime OnMarketSince { get; set; }
+        public DateTime? OnMarketSince { get; set; }
         public string ShortDescription { get; set; }
         public string LongDescription { get; set; }
         public string DataSheetUrl { get; set; }

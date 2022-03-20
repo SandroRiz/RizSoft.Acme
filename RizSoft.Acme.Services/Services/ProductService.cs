@@ -2,7 +2,7 @@
 
 namespace RizSoft.Acme.Services;
 
-public class ProductService : BaseContextService<Product, int>
+public class ProductService : BaseService<Product, int>
 {
     public ProductService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {
@@ -10,8 +10,8 @@ public class ProductService : BaseContextService<Product, int>
 
     public async Task<Product> GetWithTagsAsync(int id)
     {
-        //using var Context = ContextFactory.CreateDbContext();
-        return await Context.Products
+        using var ctx = CtxFactory.CreateDbContext();
+        return await ctx.Products
             .Include(p => p.Tags)
             .Where(p => p.Id == id)
             .FirstOrDefaultAsync();
@@ -19,12 +19,12 @@ public class ProductService : BaseContextService<Product, int>
 
     public async Task<Product> AddTag(int idProduct, Tag tag)
     {
-        //using var Context = ContextFactory.CreateDbContext();
-        var product = await Context.Products.FindAsync(idProduct);
+        using var ctx = CtxFactory.CreateDbContext();
+        var product = await ctx.Products.FindAsync(idProduct);
         if (product != null)
         {
             product.Tags.Add(tag);
-            await Context.SaveChangesAsync();
+            await ctx.SaveChangesAsync();
             return product;
         }
         else
@@ -33,18 +33,18 @@ public class ProductService : BaseContextService<Product, int>
 
     public async Task<List<Product>> ListActiveAsync()
     {
-        //using var Context = ContextFactory.CreateDbContext();
-        return await Context.Products
+        using var ctx = CtxFactory.CreateDbContext();
+        return await ctx.Products
             .Include(p => p.Category)
-            .Where(e => !e.Discontinued)
+            .Where(e => !e.Discontinued.Value)
             .OrderBy(e => e.ProductName)
             .ToListAsync();
     }
 
     public async Task<List<Product>> ListbyCategoryAsync(int categoryId)
     {
-        //using var Context = ContextFactory.CreateDbContext();
-        return await Context.Products
+        using var ctx = CtxFactory.CreateDbContext();
+        return await ctx.Products
             .Include(p => p.Category)
             .Where(p=> p.CategoryId == categoryId)
             .OrderBy(e => e.ProductName)

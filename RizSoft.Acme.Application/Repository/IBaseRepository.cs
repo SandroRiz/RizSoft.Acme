@@ -1,6 +1,6 @@
 ﻿namespace RizSoft.Acme.Application;
 
-public interface IBaseRepository<T, in TKey> : IQueryBaseRepository<T>
+public interface IBaseRepository<T, in TKey> 
 {
     Task<T> GetAsync(TKey id);
     Task<List<T>> ListAsync();

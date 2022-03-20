@@ -10,6 +10,11 @@
 <RadzenDataGrid Data="@Products" TItem="Product" AllowSorting="true" AllowPaging="true" PageSize="20" AllowFiltering="true" FilterMode="FilterMode.Simple" AllowColumnResize="true"
  SelectionMode="DataGridSelectionMode.Single" @bind-Value="@currentProduct" CellRender="@CellRender" RowRender="@RowRender">
     <Columns>
+        <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Id)" Title="Edit" Filterable="false" Visible="true">
+            <Template Context="product">
+                <a href="/product/@product.Id">Edit</a>
+            </Template>
+        </RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Id)" Title="ID" Filterable="false" Visible="false"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.Sku)" Title="Sku" Frozen="true"></RadzenDataGridColumn>
         <RadzenDataGridColumn TItem="Product" Property="@nameof(Product.ProductName)" Title="Name"></RadzenDataGridColumn>
@@ -53,6 +58,3 @@
 </RadzenDataGrid>
 
 
-<p>Aggiungi Tag a Prodotto: <span>@currentProduct?[0].Id</span></p>
-<RadzenTextBox @bind-Value="TagName"></RadzenTextBox>
-<RadzenButton Text="Salva" Click="SaveTag"></RadzenButton>

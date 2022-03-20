@@ -1,6 +1,6 @@
 ﻿namespace RizSoft.Acme.Services;
 
-public class CategoryService : BaseContextService<Category,int>
+public class CategoryService : BaseService<Category,int>
 {
     public CategoryService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {
