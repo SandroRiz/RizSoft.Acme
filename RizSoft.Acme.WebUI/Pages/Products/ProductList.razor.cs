@@ -7,16 +7,16 @@ namespace RizSoft.Acme.WebUI.Pages.Products
 {
     public partial class ProductList
     {
-        public List<Product>? Products { get; set; }
-
-        public List<Category>? Categories { get; set; }
-
+        
         [Parameter]
         public int? CategoryId { get; set; }
+
+        public List<Product>? Products { get; set; }
 
         string currentCostingMethod = "";
         Dictionary<string, string> CostingMethods = new Dictionary<string, string>()
         {{"-", "(All)"}, {"L", "LIFO"}, {"F", "FIFO"}};
+
         IList<Product>? currentProduct;
         ProductTypeEnum? currentProductType;
         public enum ProductTypeEnum : byte
@@ -27,7 +27,10 @@ namespace RizSoft.Acme.WebUI.Pages.Products
             All = 0
         }
 
+        public List<Category>? Categories { get; set; }
         private int? currentCategory;
+
+
         public string TagName { get; set; }
 
         protected override async Task OnInitializedAsync()

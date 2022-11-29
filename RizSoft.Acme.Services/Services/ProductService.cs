@@ -6,6 +6,7 @@ public class ProductService : BaseService<Product, int>
 {
     public ProductService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {
+        
     }
 
     public async Task<Product> GetWithTagsAsync(int id)
@@ -14,26 +15,24 @@ public class ProductService : BaseService<Product, int>
         return await ctx.Products
             .Include(p => p.Tags)
             .Where(p => p.Id == id)
+            .AsNoTracking()
             .FirstOrDefaultAsync();
     }
 
-    public async Task<Product> AddTag(int idProduct, Tag tag)
+    public override async Task UpdateAsync(Product product)
     {
-        using var ctx = CtxFactory.CreateDbContext();
-        var product = await ctx.Products.FindAsync(idProduct);
-        if (product != null)
-        {
-            product.Tags.Add(tag);
-            await ctx.SaveChangesAsync();
-            return product;
-        }
-        else
-            return null;
+        using var ctx = await CtxFactory.CreateDbContextAsync();
+
+        //LE HO PROVATE TUTTE!!
+
+        ctx.Products.Update(product);
+        await ctx.SaveChangesAsync();
     }
+
 
     public async Task<List<Product>> ListActiveAsync()
     {
-        using var ctx = CtxFactory.CreateDbContext();
+       using var ctx = CtxFactory.CreateDbContext();
         return await ctx.Products
             .Include(p => p.Category)
             .Where(e => !e.Discontinued.Value)
@@ -43,7 +42,7 @@ public class ProductService : BaseService<Product, int>
 
     public async Task<List<Product>> ListbyCategoryAsync(int categoryId)
     {
-        using var ctx = CtxFactory.CreateDbContext();
+       using var ctx = CtxFactory.CreateDbContext();
         return await ctx.Products
             .Include(p => p.Category)
             .Where(p=> p.CategoryId == categoryId)

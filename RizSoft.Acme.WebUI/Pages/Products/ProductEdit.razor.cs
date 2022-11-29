@@ -14,7 +14,7 @@ public partial class ProductEdit
     public List<Tag> Tags { get; set; }
 
     public List<int> ProductTags { get; set; } = new();
-    public int SelectedTag { get; set; } 
+    public IEnumerable<int> SelectedTags { get; set; } 
 
 
     [Parameter]
@@ -23,8 +23,7 @@ public partial class ProductEdit
     protected async override Task OnInitializedAsync()
     {
         Tags = await TagService.ListAsync();
-        await LoadAsync();
-        await base.OnInitializedAsync();
+
     }
 
     protected async override Task OnParametersSetAsync()
@@ -34,27 +33,36 @@ public partial class ProductEdit
 
     private async Task LoadAsync()
     {
-        //Product = await ProductService.GetAsync(ProductId);
-        Product = await ProductService.GetWithTagsAsync(ProductId);
         
-       
-
+        Product = await ProductService.GetWithTagsAsync(ProductId);
+        SelectedTags = Product.Tags.Select(x => x.Id).ToList();
+     
     }
 
     protected async Task Save(Product arg)
     {
-        if (SelectedTag > 0)
-            Product.Tags.Add(await TagService.GetAsync(SelectedTag));
        
-        await ProductService.UpdateAsync(Product);
+        try
+        {
+            await ProductService.UpdateAsync(Product);
        
-        NotificationService.Notify(NotificationSeverity.Success, "Product Saved succefully");
+            NotificationService.Notify(NotificationSeverity.Success, "Product Saved succefully");
+        }
+        catch (Exception ex)
+        {
+            var msg = ex.Message;
+            if (ex.InnerException != null)
+                msg += ex.InnerException.Message;
+
+            NotificationService.Notify(NotificationSeverity.Error, "ERROR",msg,10000);
+        }
+        
        
     }
 
     protected async Task Cancel()
     {
-        NavigationManager.NavigateTo("/product/list");
+        NavigationManager.NavigateTo("/products");
     }
 
     void TagsChanged(object value)
