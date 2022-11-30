@@ -7,7 +7,7 @@ public class ProductService : BaseService<Product, int>
 {
     public ProductService(IDbContextFactory<AcmeContext> factory) : base(factory)
     {
-        
+
     }
 
     public override async Task<Product?> GetAsync(int id)
@@ -39,11 +39,11 @@ public class ProductService : BaseService<Product, int>
         await ctx.SaveChangesAsync();
     }
 
-    public async Task SaveTags(int id, IEnumerable<int> selectedTagIds)
+    public async Task SaveTags(Product updatedProduct, IEnumerable<int> selectedTagIds)
     {
         using var ctx = await CtxFactory.CreateDbContextAsync();
 
-        Product p = await GetWithTagsAsync(id);
+        Product p = await GetWithTagsAsync(updatedProduct.Id);
         List<Tag> tags = new List<Tag>();
         foreach (int tagId in selectedTagIds)
         {
@@ -53,12 +53,19 @@ public class ProductService : BaseService<Product, int>
 
         ctx.Products.Update(p);
         await ctx.SaveChangesAsync();
-    }
 
+
+        //Super HACK che funzionerebbe, ma....
+        //await ctx.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM TagsProduct WHERE KbItemId = {id}");
+        //foreach (var tagId in selectedTagIds)
+        //{
+        //    await ctx.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO TagsKbItems (TagId,ProductId) VALUES ({tagId},{id})");
+        //}
+    }
 
     public async Task<List<Product>> ListActiveAsync()
     {
-       using var ctx = CtxFactory.CreateDbContext();
+        using var ctx = CtxFactory.CreateDbContext();
         return await ctx.Products
             .Include(p => p.Category)
             .Where(e => !e.Discontinued.Value)
@@ -68,10 +75,10 @@ public class ProductService : BaseService<Product, int>
 
     public async Task<List<Product>> ListbyCategoryAsync(int categoryId)
     {
-       using var ctx = CtxFactory.CreateDbContext();
+        using var ctx = CtxFactory.CreateDbContext();
         return await ctx.Products
             .Include(p => p.Category)
-            .Where(p=> p.CategoryId == categoryId)
+            .Where(p => p.CategoryId == categoryId)
             .OrderBy(e => e.ProductName)
             .ToListAsync();
 

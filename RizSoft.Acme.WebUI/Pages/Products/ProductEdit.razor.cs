@@ -53,7 +53,7 @@ public partial class ProductEdit
             await ProductService.UpdateAsync(Product);
 
             // se non si riesce a fare tutto in un colpo solo, metodo per salvare solo i tag
-            await ProductService.SaveTags(Product.Id, SelectedTagIds);
+            await ProductService.SaveTags(Product, SelectedTagIds);
        
             NotificationService.Notify(NotificationSeverity.Success, "Product Saved succefully");
         }
