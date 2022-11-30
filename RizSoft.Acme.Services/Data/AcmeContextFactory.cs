@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace RizSoft.Acme.Services
 {
+    // usato solo nella ConsoleApp di Playground
     public class AcmeContextFactory : IDbContextFactory<AcmeContext>
     {
         private string _connectionString { get; set; }

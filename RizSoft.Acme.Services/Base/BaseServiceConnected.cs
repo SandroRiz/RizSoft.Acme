@@ -1,5 +1,6 @@
 ﻿namespace RizSoft.Acme.Services;
 
+// not used; versione che con Blazor Server potrebbe portare problemi di concurrency
 public class BaseServiceConnected<T, TKey> :  IBaseRepository<T, TKey>
 where T : class
 {

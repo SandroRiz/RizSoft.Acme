@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RizSoft.Acme.Domain.Models;
 
 namespace RizSoft.Acme.Services;
 
@@ -9,13 +10,22 @@ public class ProductService : BaseService<Product, int>
         
     }
 
-    public async Task<Product> GetWithTagsAsync(int id)
+    public override async Task<Product?> GetAsync(int id)
+    {
+        using var ctx = CtxFactory.CreateDbContext();
+        return await ctx.Products
+            .Where(p => p.Id == id)
+            .AsNoTracking()     // se nell'update sync se ne tira su un altro per updatarlo serve altrimenti ne trackerebbe 2
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<Product?> GetWithTagsAsync(int id)
     {
         using var ctx = CtxFactory.CreateDbContext();
         return await ctx.Products
             .Include(p => p.Tags)
             .Where(p => p.Id == id)
-            .AsNoTracking()
+            .AsNoTracking()     // se nell'update sync se ne tira su un altro per updatarlo serve altrimenti ne trackerebbe 2
             .FirstOrDefaultAsync();
     }
 
@@ -26,6 +36,22 @@ public class ProductService : BaseService<Product, int>
         //LE HO PROVATE TUTTE!!
 
         ctx.Products.Update(product);
+        await ctx.SaveChangesAsync();
+    }
+
+    public async Task SaveTags(int id, IEnumerable<int> selectedTagIds)
+    {
+        using var ctx = await CtxFactory.CreateDbContextAsync();
+
+        Product p = await GetWithTagsAsync(id);
+        List<Tag> tags = new List<Tag>();
+        foreach (int tagId in selectedTagIds)
+        {
+            tags.Add(await ctx.Tags.FindAsync(tagId));
+        }
+        p.Tags = tags;
+
+        ctx.Products.Update(p);
         await ctx.SaveChangesAsync();
     }
 

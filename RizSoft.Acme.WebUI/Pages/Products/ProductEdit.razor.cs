@@ -14,7 +14,7 @@ public partial class ProductEdit
     public List<Tag> Tags { get; set; }
 
     public List<int> ProductTags { get; set; } = new();
-    public IEnumerable<int> SelectedTags { get; set; } 
+    public IEnumerable<int> SelectedTagIds { get; set; } 
 
 
     [Parameter]
@@ -33,10 +33,15 @@ public partial class ProductEdit
 
     private async Task LoadAsync()
     {
-        
-        Product = await ProductService.GetWithTagsAsync(ProductId);
-        SelectedTags = Product.Tags.Select(x => x.Id).ToList();
-     
+        // Product con collection di tags
+        //Product = await ProductService.GetWithTagsAsync(ProductId);
+        //SelectedTagIds = Product.Tags.Select(x => x.Id).ToList();
+
+        //oppure tiro su il product senza i tag
+        Product = await ProductService.GetAsync(ProductId);
+        var selectedTags = await TagService.GetTagsByProductAsync(ProductId);
+        SelectedTagIds = selectedTags.Select( x => x.Id).ToList();
+
     }
 
     protected async Task Save(Product arg)
@@ -44,7 +49,11 @@ public partial class ProductEdit
        
         try
         {
+            // salva le prop di Product; 
             await ProductService.UpdateAsync(Product);
+
+            // se non si riesce a fare tutto in un colpo solo, metodo per salvare solo i tag
+            await ProductService.SaveTags(Product.Id, SelectedTagIds);
        
             NotificationService.Notify(NotificationSeverity.Success, "Product Saved succefully");
         }
@@ -60,7 +69,7 @@ public partial class ProductEdit
        
     }
 
-    protected async Task Cancel()
+    protected void Cancel()
     {
         NavigationManager.NavigateTo("/products");
     }
