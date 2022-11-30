@@ -71,18 +71,5 @@ namespace RizSoft.Acme.WebUI.Pages.Products
             args.Attributes.Add("style", $"font-weight: {(args.Data.PackDimension > 100 ? "bold" : "normal")};");
         }
 
-        protected async Task SaveTag()
-{
-            Product p = currentProduct?[0];
-            if (p != null)
-            {
-                Tag tag = new Tag();
-                tag.TagName = TagName;
-                await TagService.AddAsync(tag);
-                p.Tags.Add(tag);
-               
-                await ProductService.UpdateAsync(p);  
-            }
-        }
     }
 }
